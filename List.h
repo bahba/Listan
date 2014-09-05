@@ -47,12 +47,12 @@ struct List_iterator_
 	//operator-> ska returnera en pekare till elementet i noden
 	T operator->();
 	//operator++ i både prefix och postfix version för att stegra iteratorn
-	T& operator+=(const T& rhs);
-	T& operator++(const T& rhs);
+	T& operator++();			//postfix
+	const T operator++(int);	//prefix
 	//operator== för att kontrollera om två iteratorer är lika, eller inte
-	T& operator==();
+	T& operator==(const T& rhs);
 	//operator!= för att kontrollera om två iteratorer är olika, eller inte
-	T& operator!=();
+	T& operator!=(const T& rhs);
 	//pekare till listnod, representationen för iteratorn
 	List_Node<T>* current_;
 
@@ -81,30 +81,32 @@ T List_iterator_<T>::operator *()
 template <typename T>
 T List_iterator_<T>::operator ->()
 {
-	return current_->data_;
+	return &current_->data_();
 }
 
 template <typename T>
-T& List_iterator_<T>::operator +=(const T& rhs)
+T& List_iterator_<T>::operator ++()
 {
-	current_ += rhs->current_;
-
+	current_ = current_->next_;
+	return *this;
 }
 
 template <typename T>
-T& List_iterator_<T>::operator ++(const T& rhs)
+const T List_iterator_<T>::operator ++(int)
+{
+	List_iterator_<T> temp = *this;
+	current_ = current_->next_;
+	return temp;
+}
+
+template <typename T>
+T& List_iterator_<T>::operator ==(const T& rhs)
 {
 
 }
 
 template <typename T>
-T& List_iterator_<T>::operator ==()
-{
-
-}
-
-template <typename T>
-T& List_iterator_<T>::operator !=()
+T& List_iterator_<T>::operator !=(const T& rhs)
 {
 
 }
