@@ -86,7 +86,7 @@ void List<T>::insert(T value)
 	try
 	{
 		head_ = new List_Node<T>(value, head_);
-		size += 1;
+		//size() += 1;
 	}
 	catch (std::exception& e)
 	{
@@ -135,7 +135,7 @@ void List<T>::remove(T value)
 		head_ = head_->next_;
 		garbage->next_ = nullptr;
 		delete garbage;
-		size -= 1;
+		//size() -= 1;
 	}
 	else
 	{
@@ -154,7 +154,7 @@ void List<T>::remove(T value)
 			prev->next_ = curr->next_;
 			garbage->next_ = nullptr;
 			delete garbage;
-			size -= 1;
+			//size() -= 1;
 		}
 	}
 }
@@ -163,11 +163,31 @@ void List<T>::remove(T value)
 template <typename T>
 void List<T>::clear()
 {
-	delete head_;
-	head_ = nullptr;
-	size = 0;
+	List_Node<T>* pn {head_};
+	while (pn != NULL)
+	{
+		head_ = head_->next_;
+		delete pn;
+		pn = head_;
+	}
+	head_ = NULL;
 }
 
+//size() ger storleken på arrayen(listan)
+template <typename T>
+int List<T>::size() const
+{
+	int counter = 0;
+	List_Node<T>* pn{ head_ };
+
+	while (pn != nullptr)
+	{
+		counter++;
+		pn = pn->next_;
+	}
+
+	return counter;
+}
 
 // empty() returnerar sant om listan är tom, falskt annars.
 template <typename T>
@@ -180,43 +200,43 @@ bool List<T>::empty() const
 template <typename T>
 bool List<T>::member(T value) const
 {
-	List_Node<T>* p{ head_ };
+	List_Node<T>* pn{ head_ };
 
-	while (p != nullptr && p->data_ != value)
-		p = p->next_;
+	while (pn != nullptr && pn->data_ != value)
+		pn = pn->next_;
 
-	return p != nullptr;
+	return pn != nullptr;
 }
 
 // print() skriver ut elementen i listan, med 'delimiter' mellan varje värde.
 template <typename T>
 void List<T>::print(std::ostream& os, const std::string& delimiter) const
 {
-	for (List_Node<T>* p = head_; p != nullptr; p = p->next_)
-		os << p->data_ << (p->next_ ? delimiter : "");
+	for (List_Node<T>* pn = head_; pn != nullptr; pn = pn->next_)
+		os << pn->data_ << (pn->next_ ? delimiter : "");
 }
 
 //byter innehåll med annan lista
 template <typename T>
 void List<T>::swap(List<T> & rightList) noexcept
 {
-	size_type temp = size();
-	size() = rightList.size();
-	rightList.size() = temp;
-	std::swap(this->head_, rightList.head_);
+	//size_type temp = size();
+	//size() = rightList.size();
+	//rightList.size() = temp;
+	//std::swap(this->head_, rightList.head_);
 	
 	
-	//	if (rightList.empty() || this->empty())
-	//			return;
-	//	List_Node* p;
-	//	List_Node* inp;
-	//
-	//	for (p = head_, inp = rightList.head_; p != nullptr && inp != nullptr; p = p->next_, inp = inp->next_)
-	//	{
-	//		auto temp = inp->data_;
-	//		inp->data_ = p->data_;
-	//		p->data_ = temp;
-	//	}
+		if (rightList.empty() || this->empty())
+				return;
+		List_Node<T>* p;
+		List_Node<T>* inp;
+	
+		for (p = head_, inp = rightList.head_; p != nullptr && inp != nullptr; p = p->next_, inp = inp->next_)
+		{
+			auto temp = inp->data_;
+			inp->data_ = p->data_;
+			p->data_ = temp;
+		}
 }
 
 //byter innehåll på två listor

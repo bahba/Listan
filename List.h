@@ -39,131 +39,187 @@ struct List_iterator_
 	typedef std::forward_iterator_tag 	iterator_category;
 
 	//defaultkonstruktor som sätter iteratorn till "förbi-sista"
-	List_iterator_<T>() = default;
+	List_iterator_() : node_() {}
+
 	//konstruktor för att initiera med en pekare till en listnod
-	List_iterator_<T>(List_Node<T>* ptr);
+	List_iterator_(List_Node<T>* n) : node_(n) {}
+
 	//operator* ska returnera en referens till elementet i noden
-	T operator*();
+	reference operator*() const {return (node_->data_);}
+
 	//operator-> ska returnera en pekare till elementet i noden
-	T operator->();
+	pointer operator->() const {return &(node_->data_);}
+
 	//operator++ i både prefix och postfix version för att stegra iteratorn
-	T& operator++();			//postfix
-	const T operator++(int);	//prefix
+	//postfix
+	List_iterator_& operator++()
+			{
+		node_ = node_->next_;
+		return *this;
+			}
+	const List_iterator_ operator++(int)
+			{
+		List_iterator_ temp_ = *this;
+		node_ = node_->next_;
+		return temp_;
+		//prefix
+			}
+
 	//operator== för att kontrollera om två iteratorer är lika, eller inte
-	T& operator==(const T& rhs);
+	bool operator==(const List_iterator_& rhs) const
+		{
+		return node_ == rhs.node_;
+		}
+
 	//operator!= för att kontrollera om två iteratorer är olika, eller inte
-	T& operator!=(const T& rhs);
+	bool operator!=(const List_iterator_& rhs) const
+		{
+		return node_ != rhs.node_;
+		}
+
 	//pekare till listnod, representationen för iteratorn
-	List_Node<T>* current_;
+	linked_list::List_Node<T>* node_;
 
 
 };
 
 //template <typename T>
-//List_iterator_<T>::List_iterator_()
+//reference List_iterator_::operator*() const
 //{
-//	default;
+//	//return static_cast<node_*>(node_->);
+//	//{ return static_cast<_Node*>(_M_node)->_M_data; }
+//}
+//
+//template <typename T>
+//value_type List_iterator_<T>::operator->() const
+//{
+//	return &node_->data_();
+//}
+
+//template <typename T>
+//List_iterator_::reference List_iterator_<T>::operator ++()
+//{
+//	node_ = node_->next_;
+//	return *this;
+//}
+
+//template <typename T>
+//const List_iterator_::value_type List_iterator_<T>::operator ++(int)
+//{
+//	List_iterator_<T> temp = *this;
+//	node_ = node_->next_;
+//	return temp;
+//}
+
+//template <typename T>
+//T& List_iterator_<T>::operator ==(const T& rhs)
+//{
+//
+//}
+//
+//template <typename T>
+//T& List_iterator_<T>::operator !=(const T& rhs)
+//{
 //
 //}
 
-template <typename T>
-List_iterator_<T>::List_iterator_(List_Node<T>* head)
-{
-	current_ = head;
-}
 
 template <typename T>
-T List_iterator_<T>::operator *()
-{
-	return current_->data_;
-}
-
-template <typename T>
-T List_iterator_<T>::operator ->()
-{
-	return &current_->data_();
-}
-
-template <typename T>
-T& List_iterator_<T>::operator ++()
-{
-	current_ = current_->next_;
-	return *this;
-}
-
-template <typename T>
-const T List_iterator_<T>::operator ++(int)
-{
-	List_iterator_<T> temp = *this;
-	current_ = current_->next_;
-	return temp;
-}
-
-template <typename T>
-T& List_iterator_<T>::operator ==(const T& rhs)
-{
-
-}
-
-template <typename T>
-T& List_iterator_<T>::operator !=(const T& rhs)
-{
-
-}
-
-
-template <typename i>
 struct List_const_iterator_
 {
-	typedef i 									value_type;
-	typedef const i* 							pointer;
-	typedef const i& 							reference;
+	typedef T 									value_type;
+	typedef const T* 							pointer;
+	typedef const T& 							reference;
 	typedef std::ptrdiff_t 				difference_type;
 	typedef std::forward_iterator_tag 	iterator_category;
 
 	//defaultkonstruktor som sätter iteratorn till "förbi-sista"
-	List_const_iterator_<i>(List_iterator_<i> *iter);
+//	List_const_iterator_<T>(List_iterator_<T> *iter);
+	List_const_iterator_() : node_() {}
+
 	//konstruktor för att initiera med en pekare till en listnod
+	List_const_iterator_(const List_Node<T>* n) : node_(n) {}
+
 	//operator* ska returnera en referens till elementet i noden
+	reference operator*() const {return (node_->data_);}
+
 	//operator-> ska returnera en pekare till elementet i noden
+	pointer operator->() const {return &(node_->data_);}
+
 	//operator++ i både prefix och postfix version för att stegra iteratorn
+	List_const_iterator_<T> operator++()
+		{
+		node_ = node_->next_;
+		return *this;
+		}
+
+	List_const_iterator_<T> operator++(int) const
+		{
+		List_const_iterator_<T> temp_ = *this;
+		node_ = node_->next_;
+		return temp_;
+		}
+
 	//operator== för att kontrollera om två iteratorer är lika, eller inte
+	bool operator== (const List_const_iterator_<T>& rhs) const
+		{
+		return node_ == rhs.node_;
+		}
+
 	//operator!= för att kontrollera om två iteratorer är olika, eller inte
+	bool operator!= (const List_const_iterator_<T>& rhs)const
+		{
+		return node_ != rhs.node_;
+		}
+
 	//pekare till listnod, representationen för iteratorn
+	const linked_list::List_Node<T>* node_;
 };
 
-template<typename i>
-List_const_iterator_<i>::List_const_iterator_(List_iterator_<i> *iter)
+//template<typename _Val>
+//    inline bool
+//    operator==(const _List_iterator<_Val>& __x,
+//	       const _List_const_iterator<_Val>& __y)
+//    { return __x._M_node == __y._M_node; }
+
+template<typename t>
+bool operator== (const List_iterator_<t>& lhs, const List_const_iterator_<t>& rhs)
 {
-	this = iter;
+	return lhs.node_ == rhs.node_;
 }
 
+template<typename t>
+bool operator!= (const List_iterator_<t>& lhs, const List_const_iterator_<t>& rhs)
+{
+	return lhs.node_ != rhs.node_;
+}
 
 template <typename T>
 class List
 {
 public:
-	typedef List_iterator_<T> iterator;
-	typedef List_const_iterator_<T> const_iterator;
+	typedef List_iterator_<T> 				iterator;
+	typedef const List_const_iterator_<T> 	const_iterator;
+	typedef std::size_t 					size_type;
 	//using size_type = std::size_t;
-	typedef std::size_t size_type;
+
 
 	List() = default;
 	List(const List<T> & list); 									//kopieringskonsruktor
 	List(List<T> && rightList)/* noexcept*/;						//flyttkonstruktor
 
 	List(std::initializer_list<T> array);
-	int size(std::initializer_list<T> array) {return array.size();}
+//	int size(std::initializer_list<T> array) {return array.size();}
 
 	List<T> &operator=(const List<T> &) /*&*/; 						//kopieringstilldelningsoperator
 	List<T> &operator=(List<T> &&) /*& noexcept*/;					//flytttilldelningsoperator
 
 	iterator begin() {return iterator{head_};}
-	const_iterator begin() const {return const_iterator{head_};}
-	const_iterator cbegin() const noexcept {return const_iterator{nullptr};}
+//	const_iterator begin() const {return const_iterator{head_};}
+//	const_iterator cbegin() const noexcept {return const_iterator{nullptr};}
 	iterator end() {return iterator{nullptr};}
-	const_iterator end() const {return const_iterator{nullptr};}
-	const_iterator cend() const noexcept {return const_iterator{nullptr};}
+//	const_iterator end() const {return const_iterator{nullptr};}
+//	const_iterator cend() const noexcept {return const_iterator{nullptr};}
 
 
 	~List() {delete head_;}
@@ -172,13 +228,14 @@ public:
 	void append(T value);
 	void remove(T value);
 	void clear();
-	size_type size() const;
+
+	int size() const;
 
 	bool empty() const;
 	bool member(T value) const;
 
 	void print(std::ostream&, const std::string& delimiter = " ") const;
-	void swap(List &) noexcept; 				//medlem: byter innehåll med annan lista
+	void swap(List<T> &) noexcept; 				//medlem: byter innehåll med annan lista
 
 private:
 	struct List_Node<T>* head_{ nullptr }; 		//creates empty node head_ that points to front of list
