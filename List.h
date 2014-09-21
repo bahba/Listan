@@ -150,9 +150,9 @@ template <typename T>
 class List
 {
 public:
-	typedef List_iterator_<T> 						iterator;
-	typedef const List_const_iterator_<T> 	const_iterator;
-	typedef std::size_t 							size_type;
+	typedef List_iterator_<T> 					iterator;
+	typedef List_const_iterator_<T> 		const_iterator;
+	typedef std::size_t 						size_type;
 	//using size_type = std::size_t;
 
 

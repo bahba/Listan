@@ -272,7 +272,7 @@ List<T> List<T>::copy(const List<T> & inList) //shallow copy
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "\n\nStandard exception thrown: " << e.what() << "\n\n";
+		std::cout << "\n\nStandard exception kastats: " << e.what() << "\n\n";
 		delete this;
 		this->~List();
 	}
